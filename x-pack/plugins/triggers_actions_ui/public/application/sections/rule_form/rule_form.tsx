@@ -647,6 +647,7 @@ export const RuleForm = ({
             setHasActionsWithBrokenConnector={setHasActionsWithBrokenConnector}
             messageVariables={selectedRuleType.actionVariables}
             defaultActionGroupId={defaultActionGroupId}
+            hasSummary={selectedRuleType.hasGetSummarizedAlerts}
             featureId={connectorFeatureId}
             isActionGroupDisabledForActionType={(actionGroupId: string, actionTypeId: string) =>
               isActionGroupDisabledForActionType(selectedRuleType, actionGroupId, actionTypeId)
@@ -673,6 +674,7 @@ export const RuleForm = ({
             actionTypeRegistry={actionTypeRegistry}
             setActionFrequencyProperty={setActionFrequencyProperty}
             defaultSummaryMessage={ruleTypeModel?.defaultSummaryMessage || summaryMessage}
+            minimumThrottleInterval={[ruleInterval, ruleIntervalUnit]}
           />
         </>
       ) : null}
