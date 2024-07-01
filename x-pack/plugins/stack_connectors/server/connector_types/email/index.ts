@@ -6,6 +6,7 @@
  */
 
 import { curry } from 'lodash';
+import sanitizeHtml from 'sanitize-html';
 import { i18n } from '@kbn/i18n';
 import { schema, TypeOf } from '@kbn/config-schema';
 import { Logger } from '@kbn/core/server';
@@ -288,16 +289,6 @@ async function executor(
     return { status: 'error', actionId, message: `[from]: ${invalidEmailsMessage}` };
   }
 
-  if (params.messageHTML != null) {
-    if (execOptions.source?.type !== ActionExecutionSourceType.NOTIFICATION) {
-      return {
-        status: 'error',
-        actionId,
-        message: `HTML email can only be sent via notifications`,
-      };
-    }
-  }
-
   const transport: Transport = {};
 
   if (secrets.user != null) {
@@ -334,7 +325,30 @@ async function executor(
   }
 
   let actualMessage = params.message;
-  const actualHTMLMessage = params.messageHTML;
+  let actualHTMLMessage = params.messageHTML;
+
+  // If not a notification only allow them to add color style to html
+  if (params.messageHTML != null) {
+    if (execOptions.source?.type !== ActionExecutionSourceType.NOTIFICATION) {
+      actualHTMLMessage = sanitizeHtml(params.messageHTML, {
+        allowedAttributes: {
+          '*': ['style'],
+        },
+        allowedStyles: {
+          '*': {
+            color: [
+              /^#(0x)?[0-9a-f]+$/i,
+              /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
+            ],
+            'background-color': [
+              /^#(0x)?[0-9a-f]+$/i,
+              /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
+            ],
+          },
+        },
+      });
+    }
+  }
 
   if (configurationUtilities.enableFooterInEmail()) {
     const footerMessage = getFooterMessage({

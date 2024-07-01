@@ -7,7 +7,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from '@kbn/i18n-react';
-import { EuiComboBox, EuiButtonEmpty, EuiFormRow } from '@elastic/eui';
+import { EuiComboBox, EuiButtonEmpty, EuiFormRow, EuiSwitch, EuiSpacer } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
 import type { ActionParamsProps } from '@kbn/triggers-actions-ui-plugin/public';
 import {
@@ -30,9 +30,8 @@ export const EmailParamsFields = ({
   onBlur = noop,
   showEmailSubjectAndMessage = true,
   useDefaultMessage,
-  ruleTypeId,
 }: ActionParamsProps<EmailActionParams>) => {
-  const { to, cc, bcc, subject, message } = actionParams;
+  const { to, cc, bcc, subject, message, messageHTML } = actionParams;
   const toOptions = to ? to.map((label: string) => ({ label })) : [];
   const ccOptions = cc ? cc.map((label: string) => ({ label })) : [];
   const bccOptions = bcc ? bcc.map((label: string) => ({ label })) : [];
@@ -42,6 +41,7 @@ export const EmailParamsFields = ({
   const [[isUsingDefault, defaultMessageUsed], setDefaultMessageUsage] = useState<
     [boolean, string | undefined]
   >([false, defaultMessage]);
+  const [useHTML, setUseHTML] = useState(Boolean(messageHTML));
   useEffect(() => {
     if (
       useDefaultMessage ||
@@ -232,7 +232,23 @@ export const EmailParamsFields = ({
           />
         </EuiFormRow>
       )}
-      {showEmailSubjectAndMessage && (
+      <EuiSpacer />
+      <EuiSwitch
+        label={<span>Use HTML</span>}
+        checked={useHTML}
+        onChange={() => {
+          if (!message) {
+            if (!useHTML) {
+              editAction('message', 'defaultMessage', index);
+            } else {
+              editAction('message', '', index);
+            }
+          }
+          setUseHTML(!useHTML);
+        }}
+      />
+      <EuiSpacer />
+      {showEmailSubjectAndMessage && !useHTML && (
         <TextAreaWithMessageVariables
           index={index}
           editAction={editAction}
@@ -246,6 +262,22 @@ export const EmailParamsFields = ({
             }
           )}
           errors={(errors.message ?? []) as string[]}
+        />
+      )}
+      {showEmailSubjectAndMessage && useHTML && (
+        <TextAreaWithMessageVariables
+          index={index}
+          editAction={editAction}
+          messageVariables={messageVariables}
+          paramsProperty={'messageHTML'}
+          inputTargetValue={messageHTML}
+          label={i18n.translate(
+            'xpack.stackConnectors.components.email.messageTextAreaFieldLabel',
+            {
+              defaultMessage: 'Message',
+            }
+          )}
+          errors={(errors.messageHTML ?? []) as string[]}
         />
       )}
     </>
