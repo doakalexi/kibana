@@ -25,7 +25,10 @@ export interface UserRealm {
   type: string;
 }
 
-export interface ApiKey {
+/**
+ * Represents the metadata of an API key.
+ */
+export interface ApiKeyDescriptor {
   /**
    *  Name of the API key.
    */
@@ -76,5 +79,5 @@ export interface AuthenticatedUser extends User {
   /**
    * Metadata of the API key that was used to authenticate the user.
    */
-  api_key?: ApiKey;
+  api_key?: ApiKeyDescriptor;
 }
