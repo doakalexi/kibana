@@ -23,6 +23,7 @@ import { DISPATCHER_ENABLED_SETTING_ID } from '../lib/dispatcher/ui_settings';
 import { NotificationPolicyClient } from '../lib/notification_policy_client';
 import { NotificationPolicyNamespaceToken } from '../lib/notification_policy_client/tokens';
 import { RulesClient } from '../lib/rules_client';
+import { RulesClientSpaceIdToken } from '../lib/rules_client/tokens';
 import { ApiKeyService } from '../lib/services/api_key_service/api_key_service';
 import { EsServiceInternalToken, EsServiceScopedToken } from '../lib/services/es_service/tokens';
 import { LoggerService, LoggerServiceToken } from '../lib/services/logger_service/logger_service';
@@ -72,6 +73,13 @@ import type { AlertingServerSetupDependencies, AlertingServerStartDependencies }
 export function bindServices({ bind }: ContainerModuleLoadOptions) {
   bind(AlertActionsClient).toSelf().inRequestScope();
   bind(RulesClient).toSelf().inRequestScope();
+  bind(RulesClientSpaceIdToken)
+    .toDynamicValue(({ get }) => {
+      const request = get(Request);
+      const spaces = get(PluginStart<AlertingServerStartDependencies['spaces']>('spaces'));
+      return spaces.spacesService.getSpaceId(request);
+    })
+    .inRequestScope();
   bind(NotificationPolicyNamespaceToken)
     .toDynamicValue(({ get }) => {
       const request = get(Request);
