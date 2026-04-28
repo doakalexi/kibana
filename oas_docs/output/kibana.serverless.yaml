@@ -70,10 +70,6 @@ tags:
     name: APM annotations
   - description: Create APM fleet server schema.
     name: APM server schema
-  - description: |
-      Configure APM source maps. A source map allows minified files to be mapped back to original source code--allowing you to maintain the speed advantage of minified code, without losing the ability to quickly and easily debug your application.
-      For best results, uploading source maps should become a part of your deployment procedure, and not something you only do when you see unhelpful errors. That's because uploading source maps after errors happen won't make old errors magically readable--errors must occur again for source mapping to occur.
-    name: APM sourcemaps
   - name: connectors
     description: |
       Connectors provide a central place to store connection information for services and integrations with Elastic or third party systems. Alerting rules can use connectors to run actions when rule conditions are met.
@@ -6005,6 +6001,42 @@ paths:
             schema:
               anyOf:
                 - discriminator:
+                    mapping:
+                      .es-query: '#/components/schemas/Kibana_HTTP_APIs_es-query-create-rule-body-alerting'
+                      .geo-containment: '#/components/schemas/Kibana_HTTP_APIs_geo-containment-create-rule-body-alerting'
+                      .index-threshold: '#/components/schemas/Kibana_HTTP_APIs_index-threshold-create-rule-body-alerting'
+                      apm.anomaly: '#/components/schemas/Kibana_HTTP_APIs_apm-anomaly-create-rule-body-alerting'
+                      apm.error_rate: '#/components/schemas/Kibana_HTTP_APIs_apm-error-rate-create-rule-body-alerting'
+                      apm.transaction_duration: '#/components/schemas/Kibana_HTTP_APIs_apm-transaction-duration-create-rule-body-alerting'
+                      apm.transaction_error_rate: '#/components/schemas/Kibana_HTTP_APIs_apm-transaction-error-rate-create-rule-body-alerting'
+                      datasetQuality.degradedDocs: '#/components/schemas/Kibana_HTTP_APIs_datasetquality-degradeddocs-create-rule-body-alerting'
+                      logs.alert.document.count: '#/components/schemas/Kibana_HTTP_APIs_logs-alert-document-count-create-rule-body-alerting'
+                      metrics.alert.inventory.threshold: '#/components/schemas/Kibana_HTTP_APIs_metrics-alert-inventory-threshold-create-rule-body-alerting'
+                      metrics.alert.threshold: '#/components/schemas/Kibana_HTTP_APIs_metrics-alert-threshold-create-rule-body-alerting'
+                      monitoring_alert_cluster_health: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-cluster-health-create-rule-body-alerting'
+                      monitoring_alert_cpu_usage: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-cpu-usage-create-rule-body-alerting'
+                      monitoring_alert_disk_usage: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-disk-usage-create-rule-body-alerting'
+                      monitoring_alert_elasticsearch_version_mismatch: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-elasticsearch-version-mismatch-create-rule-body-alerting'
+                      monitoring_alert_jvm_memory_usage: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-jvm-memory-usage-create-rule-body-alerting'
+                      monitoring_alert_kibana_version_mismatch: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-kibana-version-mismatch-create-rule-body-alerting'
+                      monitoring_alert_license_expiration: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-license-expiration-create-rule-body-alerting'
+                      monitoring_alert_logstash_version_mismatch: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-logstash-version-mismatch-create-rule-body-alerting'
+                      monitoring_alert_missing_monitoring_data: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-missing-monitoring-data-create-rule-body-alerting'
+                      monitoring_alert_nodes_changed: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-nodes-changed-create-rule-body-alerting'
+                      monitoring_alert_thread_pool_search_rejections: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-thread-pool-search-rejections-create-rule-body-alerting'
+                      monitoring_alert_thread_pool_write_rejections: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-thread-pool-write-rejections-create-rule-body-alerting'
+                      monitoring_ccr_read_exceptions: '#/components/schemas/Kibana_HTTP_APIs_monitoring-ccr-read-exceptions-create-rule-body-alerting'
+                      monitoring_shard_size: '#/components/schemas/Kibana_HTTP_APIs_monitoring-shard-size-create-rule-body-alerting'
+                      observability.rules.custom_threshold: '#/components/schemas/Kibana_HTTP_APIs_observability-rules-custom-threshold-create-rule-body-alerting'
+                      slo.rules.burnRate: '#/components/schemas/Kibana_HTTP_APIs_slo-rules-burnrate-create-rule-body-alerting'
+                      transform_health: '#/components/schemas/Kibana_HTTP_APIs_transform-health-create-rule-body-alerting'
+                      xpack.ml.anomaly_detection_alert: '#/components/schemas/Kibana_HTTP_APIs_xpack-ml-anomaly-detection-alert-create-rule-body-alerting'
+                      xpack.ml.anomaly_detection_jobs_health: '#/components/schemas/Kibana_HTTP_APIs_xpack-ml-anomaly-detection-jobs-health-create-rule-body-alerting'
+                      xpack.synthetics.alerts.monitorStatus: '#/components/schemas/Kibana_HTTP_APIs_xpack-synthetics-alerts-monitorstatus-create-rule-body-alerting'
+                      xpack.synthetics.alerts.tls: '#/components/schemas/Kibana_HTTP_APIs_xpack-synthetics-alerts-tls-create-rule-body-alerting'
+                      xpack.uptime.alerts.durationAnomaly: '#/components/schemas/Kibana_HTTP_APIs_xpack-uptime-alerts-durationanomaly-create-rule-body-alerting'
+                      xpack.uptime.alerts.monitorStatus: '#/components/schemas/Kibana_HTTP_APIs_xpack-uptime-alerts-monitorstatus-create-rule-body-alerting'
+                      xpack.uptime.alerts.tlsCertificate: '#/components/schemas/Kibana_HTTP_APIs_xpack-uptime-alerts-tlscertificate-create-rule-body-alerting'
                     propertyName: rule_type_id
                   oneOf:
                     - $ref: '#/components/schemas/Kibana_HTTP_APIs_monitoring-ccr-read-exceptions-create-rule-body-alerting'
@@ -11401,228 +11433,6 @@ paths:
       summary: Get single agent configuration
       tags:
         - APM agent configuration
-      x-metaTags:
-        - content: Kibana, Elastic Cloud Serverless
-          name: product_name
-  /api/apm/sourcemaps:
-    get:
-      description: |
-        **Spaces method and path for this operation:**
-
-        <div><span class="operation-verb get">get</span>&nbsp;<span class="operation-path">/s/{space_id}/api/apm/sourcemaps</span></div>
-
-        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
-
-        Get an array of Fleet artifacts, including source map uploads. You must have `read` or `all` Kibana privileges for the APM and User Experience feature.
-      operationId: getSourceMaps
-      parameters:
-        - $ref: '#/components/parameters/APM_UI_elastic_api_version'
-        - description: Page number
-          in: query
-          name: page
-          schema:
-            type: number
-        - description: Number of records per page
-          in: query
-          name: perPage
-          schema:
-            type: number
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                getSourceMapsResponse1:
-                  $ref: '#/components/examples/APM_UI_source_maps_get_200_response1'
-              schema:
-                $ref: '#/components/schemas/APM_UI_source_maps_response'
-          description: Successful response
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_400_response'
-          description: Bad Request response
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_401_response'
-          description: Unauthorized response
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_500_response'
-          description: Internal Server Error response
-        '501':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_501_response'
-          description: Not Implemented response
-      summary: Get source maps
-      tags:
-        - APM sourcemaps
-      x-codeSamples:
-        - lang: Curl
-          source: |
-            curl -X GET "http://localhost:5601/api/apm/sourcemaps" \
-            -H 'Content-Type: application/json' \
-            -H 'kbn-xsrf: true' \
-            -H 'Authorization: ApiKey ${YOUR_API_KEY}'
-      x-metaTags:
-        - content: Kibana, Elastic Cloud Serverless
-          name: product_name
-    post:
-      description: |
-        **Spaces method and path for this operation:**
-
-        <div><span class="operation-verb post">post</span>&nbsp;<span class="operation-path">/s/{space_id}/api/apm/sourcemaps</span></div>
-
-        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
-
-        Upload a source map for a specific service and version. You must have `all` Kibana privileges for the APM and User Experience feature.
-        The maximum payload size is `1mb`. If you attempt to upload a source map that exceeds the maximum payload size, you will get a 413 error. Before uploading source maps that exceed this default, change the maximum payload size allowed by Kibana with the `server.maxPayload` variable.
-      operationId: uploadSourceMap
-      parameters:
-        - $ref: '#/components/parameters/APM_UI_elastic_api_version'
-        - $ref: '#/components/parameters/APM_UI_kbn_xsrf'
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/APM_UI_upload_source_map_object'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                uploadSourceMapResponse1:
-                  $ref: '#/components/examples/APM_UI_source_maps_upload_200_response1'
-              schema:
-                $ref: '#/components/schemas/APM_UI_upload_source_maps_response'
-          description: Successful response
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_400_response'
-          description: Bad Request response
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_401_response'
-          description: Unauthorized response
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_403_response'
-          description: Forbidden response
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_500_response'
-          description: Internal Server Error response
-        '501':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_501_response'
-          description: Not Implemented response
-      summary: Upload a source map
-      tags:
-        - APM sourcemaps
-      x-codeSamples:
-        - lang: Curl
-          source: |
-            curl -X POST "http://localhost:5601/api/apm/sourcemaps" \
-            -H 'Content-Type: multipart/form-data' \
-            -H 'kbn-xsrf: true' \
-            -H 'Authorization: ApiKey ${YOUR_API_KEY}' \
-            -F 'service_name="foo"' \
-            -F 'service_version="1.0.0"' \
-            -F 'bundle_filepath="/test/e2e/general-usecase/bundle.js"' \
-            -F 'sourcemap="{\"version\":3,\"file\":\"static/js/main.chunk.js\",\"sources\":[\"fleet-source-map-client/src/index.css\",\"fleet-source-map-client/src/App.js\",\"webpack:///./src/index.css?bb0a\",\"fleet-source-map-client/src/index.js\",\"fleet-source-map-client/src/reportWebVitals.js\"],\"sourcesContent\":[\"content\"],\"mappings\":\"mapping\",\"sourceRoot\":\"\"}"' 
-      x-metaTags:
-        - content: Kibana, Elastic Cloud Serverless
-          name: product_name
-  /api/apm/sourcemaps/{id}:
-    delete:
-      description: |
-        **Spaces method and path for this operation:**
-
-        <div><span class="operation-verb delete">delete</span>&nbsp;<span class="operation-path">/s/{space_id}/api/apm/sourcemaps/{id}</span></div>
-
-        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
-
-        Delete a previously uploaded source map. You must have `all` Kibana privileges for the APM and User Experience feature.
-      operationId: deleteSourceMap
-      parameters:
-        - $ref: '#/components/parameters/APM_UI_elastic_api_version'
-        - $ref: '#/components/parameters/APM_UI_kbn_xsrf'
-        - description: Source map identifier
-          in: path
-          name: id
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                deleteSourceMapResponseExample1:
-                  $ref: '#/components/examples/APM_UI_source_maps_delete_200_response1'
-              schema:
-                additionalProperties: false
-                description: The response body is intentionally empty for this endpoint.
-                type: object
-          description: Successful response
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_400_response'
-          description: Bad Request response
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_401_response'
-          description: Unauthorized response
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_403_response'
-          description: Forbidden response
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_500_response'
-          description: Internal Server Error response
-        '501':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_501_response'
-          description: Not Implemented response
-      summary: Delete source map
-      tags:
-        - APM sourcemaps
-      x-codeSamples:
-        - lang: Curl
-          source: |
-            curl -X DELETE "http://localhost:5601/api/apm/sourcemaps/apm:foo-1.0.0-644fd5a9" \
-            -H 'Content-Type: application/json' \
-            -H 'kbn-xsrf: true' \
-            -H 'Authorization: ApiKey ${YOUR_API_KEY}'
       x-metaTags:
         - content: Kibana, Elastic Cloud Serverless
           name: product_name
@@ -21039,6 +20849,13 @@ paths:
         '500':
           content:
             application/json:
+              examples:
+                InitMonitoringEngineError:
+                  summary: Internal server error during engine initialization
+                  value:
+                    error:
+                      message: Failed to initialize monitoring engine
+                    status: error
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_MonitoringEngineDescriptor'
           description: Internal Server Error
@@ -21078,6 +20895,11 @@ paths:
         '409':
           content:
             application/json:
+              examples:
+                ScheduleMonitoringEngineConflict:
+                  summary: Engine is already running
+                  value:
+                    message: Monitoring engine is already running
               schema:
                 type: object
                 properties:
@@ -21163,13 +20985,16 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                has_all_required: true
-                privileges:
-                  elasticsearch:
-                    index:
-                      .entity_analytics.monitoring.user-default:
-                        read: true
+              examples:
+                PrivMonPrivilegesResponse:
+                  summary: Privileges check response
+                  value:
+                    has_all_required: true
+                    privileges:
+                      elasticsearch:
+                        index:
+                          .entity_analytics.monitoring.user-default:
+                            read: true
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_EntityAnalyticsPrivileges'
           description: Successful response
@@ -21250,6 +21075,14 @@ paths:
       requestBody:
         content:
           multipart/form-data:
+            examples:
+              PrivmonBulkUploadUsersCSVRequest:
+                summary: CSV file with privileged users
+                value:
+                  file: |
+                    username,is_privileged
+                    john.doe,true
+                    jane.smith,true
             schema:
               type: object
               properties:
@@ -21263,17 +21096,20 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                PrivmonBulkUploadUsersCSVResponse:
+                  summary: Bulk upload response with mixed results
+                  value:
+                    errors:
+                      - index: 1
+                        message: Invalid monitored field
+                        username: john.doe
+                    stats:
+                      failedOperations: 1
+                      successfulOperations: 1
+                      totalOperations: 2
+                      uploaded: 2
               schema:
-                example:
-                  errors:
-                    - index: 1
-                      message: Invalid monitored field
-                      username: john.doe
-                  stats:
-                    failedOperations: 1
-                    successfulOperations: 1
-                    totalOperations: 2
-                    uploaded: 1
                 type: object
                 properties:
                   errors:
@@ -21306,7 +21142,8 @@ paths:
         Removes a privileged user from monitoring by their document ID.
       operationId: DeletePrivMonUser
       parameters:
-        - in: path
+        - description: The document ID of the monitored user to delete
+          in: path
           name: id
           required: true
           schema:
@@ -21350,7 +21187,8 @@ paths:
         Updates the details of an existing monitored privileged user by their document ID.
       operationId: UpdatePrivMonUser
       parameters:
-        - in: path
+        - description: The document ID of the monitored user to update
+          in: path
           name: id
           required: true
           schema:
@@ -26073,7 +25911,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the download source
+          in: path
           name: sourceId
           required: true
           schema:
@@ -26153,7 +25992,8 @@ paths:
         Get an agent binary download source by ID.<br/><br/>[Required authorization] Route required privileges: fleet-agent-policies-read OR fleet-settings-read.
       operationId: get-fleet-agent-download-sources-sourceid
       parameters:
-        - in: path
+        - description: The ID of the download source
+          in: path
           name: sourceId
           required: true
           schema:
@@ -26344,7 +26184,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the download source
+          in: path
           name: sourceId
           required: true
           schema:
@@ -26640,22 +26481,26 @@ paths:
         List all agent policies.<br/><br/>[Required authorization] Route required privileges: fleet-agent-policies-read OR fleet-agents-read OR fleet-setup.
       operationId: get-fleet-agent-policies
       parameters:
-        - in: query
+        - description: Page number
+          in: query
           name: page
           required: false
           schema:
             type: number
-        - in: query
+        - description: Number of results per page
+          in: query
           name: perPage
           required: false
           schema:
             type: number
-        - in: query
+        - description: Field to sort results by
+          in: query
           name: sortField
           required: false
           schema:
             type: string
-        - in: query
+        - description: Sort order, ascending or descending
+          in: query
           name: sortOrder
           required: false
           schema:
@@ -26663,12 +26508,14 @@ paths:
               - desc
               - asc
             type: string
-        - in: query
+        - description: When true, only show policies with upgradeable agents
+          in: query
           name: showUpgradeable
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: A KQL query string to filter results
+          in: query
           name: kuery
           required: false
           schema:
@@ -26692,7 +26539,8 @@ paths:
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: 'Format for the response: simplified or legacy'
+          in: query
           name: format
           required: false
           schema:
@@ -27020,6 +26868,25 @@ paths:
                                             type: array
                                   enabled:
                                     type: boolean
+                                  global_data_tags:
+                                    items:
+                                      additionalProperties: false
+                                      type: object
+                                      properties:
+                                        name:
+                                          description: The name of the custom field. Cannot contain spaces.
+                                          type: string
+                                        value:
+                                          anyOf:
+                                            - type: string
+                                            - type: number
+                                          description: The value of the custom field.
+                                      required:
+                                        - name
+                                        - value
+                                    maxItems: 100
+                                    nullable: true
+                                    type: array
                                   id:
                                     description: Package policy unique identifier.
                                     type: string
@@ -27611,7 +27478,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: query
+        - description: Whether to add the system integration to the new agent policy
+          in: query
           name: sys_monitoring
           required: false
           schema:
@@ -28180,6 +28048,25 @@ paths:
                                           type: array
                                 enabled:
                                   type: boolean
+                                global_data_tags:
+                                  items:
+                                    additionalProperties: false
+                                    type: object
+                                    properties:
+                                      name:
+                                        description: The name of the custom field. Cannot contain spaces.
+                                        type: string
+                                      value:
+                                        anyOf:
+                                          - type: string
+                                          - type: number
+                                        description: The value of the custom field.
+                                    required:
+                                      - name
+                                      - value
+                                  maxItems: 100
+                                  nullable: true
+                                  type: array
                                 id:
                                   description: Package policy unique identifier.
                                   type: string
@@ -28761,7 +28648,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: query
+        - description: 'Format for the response: simplified or legacy'
+          in: query
           name: format
           required: false
           schema:
@@ -29112,6 +29000,25 @@ paths:
                                             type: array
                                   enabled:
                                     type: boolean
+                                  global_data_tags:
+                                    items:
+                                      additionalProperties: false
+                                      type: object
+                                      properties:
+                                        name:
+                                          description: The name of the custom field. Cannot contain spaces.
+                                          type: string
+                                        value:
+                                          anyOf:
+                                            - type: string
+                                            - type: number
+                                          description: The value of the custom field.
+                                      required:
+                                        - name
+                                        - value
+                                    maxItems: 100
+                                    nullable: true
+                                    type: array
                                   id:
                                     description: Package policy unique identifier.
                                     type: string
@@ -29699,12 +29606,14 @@ paths:
         Get an agent policy by ID.<br/><br/>[Required authorization] Route required privileges: fleet-agent-policies-read OR fleet-agents-read OR fleet-setup.
       operationId: get-fleet-agent-policies-agentpolicyid
       parameters:
-        - in: path
+        - description: The ID of the agent policy
+          in: path
           name: agentPolicyId
           required: true
           schema:
             type: string
-        - in: query
+        - description: 'Format for the response: simplified or legacy'
+          in: query
           name: format
           required: false
           schema:
@@ -30028,6 +29937,25 @@ paths:
                                           type: array
                                 enabled:
                                   type: boolean
+                                global_data_tags:
+                                  items:
+                                    additionalProperties: false
+                                    type: object
+                                    properties:
+                                      name:
+                                        description: The name of the custom field. Cannot contain spaces.
+                                        type: string
+                                      value:
+                                        anyOf:
+                                          - type: string
+                                          - type: number
+                                        description: The value of the custom field.
+                                    required:
+                                      - name
+                                      - value
+                                  maxItems: 100
+                                  nullable: true
+                                  type: array
                                 id:
                                   description: Package policy unique identifier.
                                   type: string
@@ -30619,12 +30547,14 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the agent policy
+          in: path
           name: agentPolicyId
           required: true
           schema:
             type: string
-        - in: query
+        - description: 'Format for the response: simplified or legacy'
+          in: query
           name: format
           required: false
           schema:
@@ -31197,6 +31127,25 @@ paths:
                                           type: array
                                 enabled:
                                   type: boolean
+                                global_data_tags:
+                                  items:
+                                    additionalProperties: false
+                                    type: object
+                                    properties:
+                                      name:
+                                        description: The name of the custom field. Cannot contain spaces.
+                                        type: string
+                                      value:
+                                        anyOf:
+                                          - type: string
+                                          - type: number
+                                        description: The value of the custom field.
+                                    required:
+                                      - name
+                                      - value
+                                  maxItems: 100
+                                  nullable: true
+                                  type: array
                                 id:
                                   description: Package policy unique identifier.
                                   type: string
@@ -31771,7 +31720,8 @@ paths:
         Get the auto-upgrade status for agents assigned to an agent policy.<br/><br/>[Required authorization] Route required privileges: fleet-agents-read.
       operationId: get-fleet-agent-policies-agentpolicyid-auto-upgrade-agents-status
       parameters:
-        - in: path
+        - description: The ID of the agent policy
+          in: path
           name: agentPolicyId
           required: true
           schema:
@@ -31889,12 +31839,14 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the agent policy
+          in: path
           name: agentPolicyId
           required: true
           schema:
             type: string
-        - in: query
+        - description: 'Format for the response: simplified or legacy'
+          in: query
           name: format
           required: false
           schema:
@@ -32238,6 +32190,25 @@ paths:
                                           type: array
                                 enabled:
                                   type: boolean
+                                global_data_tags:
+                                  items:
+                                    additionalProperties: false
+                                    type: object
+                                    properties:
+                                      name:
+                                        description: The name of the custom field. Cannot contain spaces.
+                                        type: string
+                                      value:
+                                        anyOf:
+                                          - type: string
+                                          - type: number
+                                        description: The value of the custom field.
+                                    required:
+                                      - name
+                                      - value
+                                  maxItems: 100
+                                  nullable: true
+                                  type: array
                                 id:
                                   description: Package policy unique identifier.
                                   type: string
@@ -32812,7 +32783,8 @@ paths:
         Download an agent policy by ID.<br/><br/>[Required authorization] Route required privileges: fleet-agent-policies-read OR fleet-setup.
       operationId: get-fleet-agent-policies-agentpolicyid-download
       parameters:
-        - in: path
+        - description: The ID of the agent policy
+          in: path
           name: agentPolicyId
           required: true
           schema:
@@ -32929,7 +32901,8 @@ paths:
         Get a full agent policy by ID.<br/><br/>[Required authorization] Route required privileges: fleet-agent-policies-read.
       operationId: get-fleet-agent-policies-agentpolicyid-full
       parameters:
-        - in: path
+        - description: The ID of the agent policy
+          in: path
           name: agentPolicyId
           required: true
           schema:
@@ -33552,7 +33525,8 @@ paths:
         Get a list of outputs associated with agent policy by policy id.<br/><br/>[Required authorization] Route required privileges: fleet-agent-policies-read AND fleet-settings-read.
       operationId: get-fleet-agent-policies-agentpolicyid-outputs
       parameters:
-        - in: path
+        - description: The ID of the agent policy
+          in: path
           name: agentPolicyId
           required: true
           schema:
@@ -33717,6 +33691,7 @@ paths:
               type: object
               properties:
                 agentPolicyId:
+                  description: The ID of the agent policy
                   type: string
                 force:
                   description: bypass validation checks that can prevent agent policy deletion
@@ -33954,12 +33929,14 @@ paths:
         Get a summary of agent statuses for a given agent policy.
       operationId: get-fleet-agent-status
       parameters:
-        - in: query
+        - description: Filter by agent policy ID
+          in: query
           name: policyId
           required: false
           schema:
             type: string
-        - in: query
+        - description: Filter by one or more agent policy IDs
+          in: query
           name: policyIds
           required: false
           schema:
@@ -33967,7 +33944,8 @@ paths:
               type: string
             maxItems: 1000
             type: array
-        - in: query
+        - description: A KQL query string to filter results
+          in: query
           name: kuery
           required: false
           schema:
@@ -34080,7 +34058,8 @@ paths:
         Get the data streams that an agent is actively sending data to.<br/><br/>[Required authorization] Route required privileges: fleet-agents-read.
       operationId: get-fleet-agent-status-data
       parameters:
-        - in: query
+        - description: Agent IDs to check data for, as an array or comma-separated string
+          in: query
           name: agentsIds
           required: true
           schema:
@@ -34088,17 +34067,20 @@ paths:
               type: string
             maxItems: 10000
             type: array
-        - in: query
+        - description: Filter by integration package name
+          in: query
           name: pkgName
           required: false
           schema:
             type: string
-        - in: query
+        - description: Filter by integration package version
+          in: query
           name: pkgVersion
           required: false
           schema:
             type: string
-        - in: query
+        - description: When true, return a preview of the ingested data
+          in: query
           name: previewData
           required: false
           schema:
@@ -34384,6 +34366,24 @@ paths:
                 force:
                   description: Force package policy creation even if the package is not verified, or if the agent policy is managed.
                   type: boolean
+                global_data_tags:
+                  items:
+                    additionalProperties: false
+                    type: object
+                    properties:
+                      name:
+                        description: The name of the custom field. Cannot contain spaces.
+                        type: string
+                      value:
+                        anyOf:
+                          - type: string
+                          - type: number
+                        description: The value of the custom field.
+                    required:
+                      - name
+                      - value
+                  maxItems: 100
+                  type: array
                 id:
                   description: Policy unique identifier.
                   type: string
@@ -34774,6 +34774,25 @@ paths:
                                 type: array
                       enabled:
                         type: boolean
+                      global_data_tags:
+                        items:
+                          additionalProperties: false
+                          type: object
+                          properties:
+                            name:
+                              description: The name of the custom field. Cannot contain spaces.
+                              type: string
+                            value:
+                              anyOf:
+                                - type: string
+                                - type: number
+                              description: The value of the custom field.
+                          required:
+                            - name
+                            - value
+                        maxItems: 100
+                        nullable: true
+                        type: array
                       id:
                         description: Package policy unique identifier.
                         type: string
@@ -35435,58 +35454,68 @@ paths:
         List agents, with optional filtering and pagination.<br/><br/>[Required authorization] Route required privileges: fleet-agents-read.
       operationId: get-fleet-agents
       parameters:
-        - in: query
+        - description: Page number
+          in: query
           name: page
           required: false
           schema:
             type: number
-        - in: query
+        - description: Number of results per page
+          in: query
           name: perPage
           required: false
           schema:
             default: 20
             type: number
-        - in: query
+        - description: A KQL query string to filter results
+          in: query
           name: kuery
           required: false
           schema:
             type: string
-        - in: query
+        - description: When true, include agentless agents in the results
+          in: query
           name: showAgentless
           required: false
           schema:
             default: true
             type: boolean
-        - in: query
+        - description: When true, include inactive agents in the results
+          in: query
           name: showInactive
           required: false
           schema:
             default: false
             type: boolean
-        - in: query
+        - description: When true, include CPU and memory metrics in the response
+          in: query
           name: withMetrics
           required: false
           schema:
             default: false
             type: boolean
-        - in: query
+        - description: When true, only return agents that are upgradeable
+          in: query
           name: showUpgradeable
           required: false
           schema:
             default: false
             type: boolean
-        - in: query
+        - description: When true, return a summary of agent statuses in the response
+          in: query
           name: getStatusSummary
           required: false
           schema:
             default: false
             type: boolean
-        - in: query
+        - description: Field to sort results by
+          in: query
           name: sortField
           required: false
           schema:
             type: string
-        - in: query
+        - description: Sort order, ascending or descending
+          in: query
           name: sortOrder
           required: false
           schema:
@@ -35494,22 +35523,26 @@ paths:
               - asc
               - desc
             type: string
-        - in: query
+        - description: JSON-encoded array of sort values for `search_after` pagination
+          in: query
           name: searchAfter
           required: false
           schema:
             type: string
-        - in: query
+        - description: When true, opens a new point-in-time for pagination
+          in: query
           name: openPit
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: Point-in-time ID for pagination
+          in: query
           name: pitId
           required: false
           schema:
             type: string
-        - in: query
+        - description: Duration to keep the point-in-time alive, for example, `1m`
+          in: query
           name: pitKeepAlive
           required: false
           schema:
@@ -36068,7 +36101,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The agent ID
+          in: path
           name: agentId
           required: true
           schema:
@@ -36151,12 +36185,14 @@ paths:
         Get an agent by ID.<br/><br/>[Required authorization] Route required privileges: fleet-agents-read.
       operationId: get-fleet-agents-agentid
       parameters:
-        - in: path
+        - description: The agent ID
+          in: path
           name: agentId
           required: true
           schema:
             type: string
-        - in: query
+        - description: When true, include CPU and memory metrics in the response
+          in: query
           name: withMetrics
           required: false
           schema:
@@ -36612,7 +36648,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The agent ID
+          in: path
           name: agentId
           required: true
           schema:
@@ -37085,7 +37122,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The agent ID
+          in: path
           name: agentId
           required: true
           schema:
@@ -37334,7 +37372,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The agent ID
+          in: path
           name: agentId
           required: true
           schema:
@@ -37579,7 +37618,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The agent ID
+          in: path
           name: agentId
           required: true
           schema:
@@ -37667,7 +37707,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The agent ID
+          in: path
           name: agentId
           required: true
           schema:
@@ -37848,7 +37889,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The agent ID
+          in: path
           name: agentId
           required: true
           schema:
@@ -37915,7 +37957,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The agent ID
+          in: path
           name: agentId
           required: true
           schema:
@@ -38002,7 +38045,8 @@ paths:
         Get a list of files uploaded by a specific agent.<br/><br/>[Required authorization] Route required privileges: fleet-agents-read.
       operationId: get-fleet-agents-agentid-uploads
       parameters:
-        - in: path
+        - description: The agent ID
+          in: path
           name: agentId
           required: true
           schema:
@@ -38111,29 +38155,34 @@ paths:
         Get the current status of recent agent actions.<br/><br/>[Required authorization] Route required privileges: fleet-agents-read.
       operationId: get-fleet-agents-action-status
       parameters:
-        - in: query
+        - description: Page number
+          in: query
           name: page
           required: false
           schema:
             default: 0
             type: number
-        - in: query
+        - description: Number of results per page
+          in: query
           name: perPage
           required: false
           schema:
             default: 20
             type: number
-        - in: query
+        - description: Return actions created before this date
+          in: query
           name: date
           required: false
           schema:
             type: string
-        - in: query
+        - description: Return only the latest N actions
+          in: query
           name: latest
           required: false
           schema:
             type: number
-        - in: query
+        - description: Number of error details to include per action
+          in: query
           name: errorSize
           required: false
           schema:
@@ -38320,7 +38369,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the action to cancel
+          in: path
           name: actionId
           required: true
           schema:
@@ -39422,7 +39472,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the uploaded file
+          in: path
           name: fileId
           required: true
           schema:
@@ -39496,12 +39547,14 @@ paths:
         Get a file uploaded by an agent.<br/><br/>[Required authorization] Route required privileges: fleet-agents-read.
       operationId: get-fleet-agents-files-fileid-filename
       parameters:
-        - in: path
+        - description: The ID of the uploaded file
+          in: path
           name: fileId
           required: true
           schema:
             type: string
-        - in: path
+        - description: The name of the uploaded file
+          in: path
           name: fileName
           required: true
           schema:
@@ -39768,12 +39821,14 @@ paths:
         Get a list of all tags used across enrolled agents.<br/><br/>[Required authorization] Route required privileges: fleet-agents-read.
       operationId: get-fleet-agents-tags
       parameters:
-        - in: query
+        - description: A KQL query string to filter results
+          in: query
           name: kuery
           required: false
           schema:
             type: string
-        - in: query
+        - description: When true, include tags from inactive agents
+          in: query
           name: showInactive
           required: false
           schema:
@@ -39850,7 +39905,8 @@ paths:
         Check whether the current user has the required permissions to use Fleet. Optionally verifies Fleet Server setup privileges.
       operationId: get-fleet-check-permissions
       parameters:
-        - in: query
+        - description: When true, check Fleet Server setup privileges in addition to standard Fleet privileges
+          in: query
           name: fleetServerSetup
           required: false
           schema:
@@ -40928,19 +40984,22 @@ paths:
         List all enrollment API keys.<br/><br/>[Required authorization] Route required privileges: fleet-agents-all OR fleet-setup.
       operationId: get-fleet-enrollment-api-keys
       parameters:
-        - in: query
+        - description: Page number
+          in: query
           name: page
           required: false
           schema:
             default: 1
             type: number
-        - in: query
+        - description: Number of results per page
+          in: query
           name: perPage
           required: false
           schema:
             default: 20
             type: number
-        - in: query
+        - description: A KQL query string to filter results
+          in: query
           name: kuery
           required: false
           schema:
@@ -41247,7 +41306,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the enrollment API key
+          in: path
           name: keyId
           required: true
           schema:
@@ -41329,7 +41389,8 @@ paths:
         Get an enrollment API key by ID.<br/><br/>[Required authorization] Route required privileges: fleet-agents-all OR fleet-setup.
       operationId: get-fleet-enrollment-api-keys-keyid
       parameters:
-        - in: path
+        - description: The ID of the enrollment API key
+          in: path
           name: keyId
           required: true
           schema:
@@ -41582,12 +41643,14 @@ paths:
         Get a list of integration categories.<br/><br/>[Required authorization] Route required privileges: integrations-read OR fleet-setup OR fleet-all.
       operationId: get-fleet-epm-categories
       parameters:
-        - in: query
+        - description: When true, include prerelease packages in the results
+          in: query
           name: prerelease
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: When true, include categories that only contain policy templates
+          in: query
           name: include_policy_templates
           required: false
           schema:
@@ -41876,7 +41939,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
@@ -41961,7 +42025,8 @@ paths:
         Get a list of data streams created by installed integration packages.<br/><br/>[Required authorization] Route required privileges: integrations-read OR fleet-setup OR fleet-all.
       operationId: get-fleet-epm-data-streams
       parameters:
-        - in: query
+        - description: Filter by data stream type
+          in: query
           name: type
           required: false
           schema:
@@ -41972,12 +42037,14 @@ paths:
               - synthetics
               - profiling
             type: string
-        - in: query
+        - description: Filter data streams by dataset name
+          in: query
           name: datasetQuery
           required: false
           schema:
             type: string
-        - in: query
+        - description: Sort order, ascending or descending
+          in: query
           name: sortOrder
           required: false
           schema:
@@ -41986,7 +42053,8 @@ paths:
               - asc
               - desc
             type: string
-        - in: query
+        - description: When true, only return data streams that are not associated with a package
+          in: query
           name: uncategorisedOnly
           required: false
           schema:
@@ -42072,22 +42140,26 @@ paths:
         Get a list of integration packages available in the registry.<br/><br/>[Required authorization] Route required privileges: integrations-read OR fleet-setup OR fleet-all.
       operationId: get-fleet-epm-packages
       parameters:
-        - in: query
+        - description: Filter packages by category
+          in: query
           name: category
           required: false
           schema:
             type: string
-        - in: query
+        - description: When true, include prerelease packages in the results
+          in: query
           name: prerelease
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: When true, exclude the install status from the response
+          in: query
           name: excludeInstallStatus
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: When true, include the number of package policies per package
+          in: query
           name: withPackagePoliciesCount
           required: false
           schema:
@@ -42641,13 +42713,15 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: query
+        - description: When true, ignore mapping update errors during installation
+          in: query
           name: ignoreMappingUpdateErrors
           required: false
           schema:
             default: false
             type: boolean
-        - in: query
+        - description: When true, skip data stream rollover after installation
+          in: query
           name: skipDataStreamRollover
           required: false
           schema:
@@ -42661,6 +42735,10 @@ paths:
                 description: Upload a .zip or .tar.gz package archive (max 100MB)
                 value: <binary package archive>
           application/gzip; application/zip:
+            examples:
+              postInstallByUploadRequestExample:
+                description: Upload a .zip or .tar.gz package archive (max 100MB)
+                value: <binary package archive>
             schema:
               format: binary
               type: string
@@ -42668,6 +42746,15 @@ paths:
         '200':
           content:
             application/gzip; application/zip:
+              examples:
+                postInstallByUploadExample:
+                  description: Package successfully installed from upload
+                  value:
+                    _meta:
+                      install_source: upload
+                    items:
+                      - id: my-custom-package-logs-default
+                        type: index_template
               schema:
                 additionalProperties: false
                 type: object
@@ -42759,6 +42846,13 @@ paths:
         '400':
           content:
             application/gzip; application/zip:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -42811,7 +42905,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: query
+        - description: When true, allow installing prerelease versions
+          in: query
           name: prerelease
           required: false
           schema:
@@ -43659,12 +43754,14 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: query
+        - description: When true, delete the package even if it has active package policies
+          in: query
           name: force
           required: false
           schema:
@@ -43792,27 +43889,32 @@ paths:
         Get information about a package by name, returning the latest installed or available version.
       operationId: get-fleet-epm-packages-pkgname
       parameters:
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: query
+        - description: When true, returns the package even if the signature cannot be verified
+          in: query
           name: ignoreUnverified
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: When true, include prerelease versions
+          in: query
           name: prerelease
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: When true, return the full package info including assets
+          in: query
           name: full
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: When true, include package metadata such as whether it has package policies
+          in: query
           name: withMetadata
           required: false
           schema:
@@ -44437,23 +44539,27 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: query
+        - description: When true, allow installing prerelease versions
+          in: query
           name: prerelease
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: When true, ignore mapping update errors during installation
+          in: query
           name: ignoreMappingUpdateErrors
           required: false
           schema:
             default: false
             type: boolean
-        - in: query
+        - description: When true, skip data stream rollover after installation
+          in: query
           name: skipDataStreamRollover
           required: false
           schema:
@@ -44629,7 +44735,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
@@ -45254,17 +45361,20 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: path
+        - description: Package version
+          in: path
           name: pkgVersion
           required: true
           schema:
             type: string
-        - in: query
+        - description: When true, delete the package even if it has active package policies
+          in: query
           name: force
           required: false
           schema:
@@ -45392,32 +45502,38 @@ paths:
         Get information about a specific version of a package.
       operationId: get-fleet-epm-packages-pkgname-pkgversion
       parameters:
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: path
+        - description: Package version
+          in: path
           name: pkgVersion
           required: true
           schema:
             type: string
-        - in: query
+        - description: When true, returns the package even if the signature cannot be verified
+          in: query
           name: ignoreUnverified
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: When true, include prerelease versions
+          in: query
           name: prerelease
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: When true, return the full package info including assets
+          in: query
           name: full
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: When true, include package metadata such as whether it has package policies
+          in: query
           name: withMetadata
           required: false
           schema:
@@ -46042,28 +46158,33 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: path
+        - description: Package version
+          in: path
           name: pkgVersion
           required: true
           schema:
             type: string
-        - in: query
+        - description: When true, allow installing prerelease versions
+          in: query
           name: prerelease
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: When true, ignore mapping update errors during installation
+          in: query
           name: ignoreMappingUpdateErrors
           required: false
           schema:
             default: false
             type: boolean
-        - in: query
+        - description: When true, skip data stream rollover after installation
+          in: query
           name: skipDataStreamRollover
           required: false
           schema:
@@ -46239,12 +46360,14 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: path
+        - description: Package version
+          in: path
           name: pkgVersion
           required: true
           schema:
@@ -46862,17 +46985,20 @@ paths:
         Get the contents of a specific file from a package.<br/><br/>[Required authorization] Route required privileges: integrations-read OR fleet-setup OR fleet-all.
       operationId: get-fleet-epm-packages-pkgname-pkgversion-filepath
       parameters:
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: path
+        - description: Package version
+          in: path
           name: pkgVersion
           required: true
           schema:
             type: string
-        - in: path
+        - description: File path within the package
+          in: path
           name: filePath
           required: true
           schema:
@@ -46941,17 +47067,20 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: path
+        - description: Package version
+          in: path
           name: pkgVersion
           required: true
           schema:
             type: string
-        - in: query
+        - description: The ID of the package policy
+          in: query
           name: packagePolicyId
           required: true
           schema:
@@ -47128,12 +47257,14 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: path
+        - description: Package version
+          in: path
           name: pkgVersion
           required: true
           schema:
@@ -47211,12 +47342,14 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: path
+        - description: Package version
+          in: path
           name: pkgVersion
           required: true
           schema:
@@ -47316,12 +47449,14 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: path
+        - description: Package version
+          in: path
           name: pkgVersion
           required: true
           schema:
@@ -47414,17 +47549,20 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: path
+        - description: Package version
+          in: path
           name: pkgVersion
           required: true
           schema:
             type: string
-        - in: query
+        - description: When true, allow prerelease versions
+          in: query
           name: prerelease
           required: false
           schema:
@@ -47709,7 +47847,8 @@ paths:
         Get usage statistics for a specific package, such as the number of agent policies using it.<br/><br/>[Required authorization] Route required privileges: integrations-read OR fleet-setup OR fleet-all.
       operationId: get-fleet-epm-packages-pkgname-stats
       parameters:
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
@@ -47789,7 +47928,8 @@ paths:
         Get a list of all currently installed integration packages.<br/><br/>[Required authorization] Route required privileges: integrations-read OR fleet-setup OR fleet-all.
       operationId: get-fleet-epm-packages-installed
       parameters:
-        - in: query
+        - description: Filter by data stream type
+          in: query
           name: dataStreamType
           required: false
           schema:
@@ -47800,17 +47940,20 @@ paths:
               - synthetics
               - profiling
             type: string
-        - in: query
+        - description: When true, only return packages with active data streams
+          in: query
           name: showOnlyActiveDataStreams
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: Filter packages by name
+          in: query
           name: nameQuery
           required: false
           schema:
             type: string
-        - in: query
+        - description: Sort values from the previous page for `search_after` pagination
+          in: query
           name: searchAfter
           required: false
           schema:
@@ -47820,13 +47963,15 @@ paths:
                 - type: number
             maxItems: 10
             type: array
-        - in: query
+        - description: Number of results per page
+          in: query
           name: perPage
           required: false
           schema:
             default: 15
             type: number
-        - in: query
+        - description: Sort order, ascending or descending
+          in: query
           name: sortOrder
           required: false
           schema:
@@ -48048,17 +48193,20 @@ paths:
         Get an inputs template for a package, used to pre-populate package policy forms.<br/><br/>[Required authorization] Route required privileges: integrations-read OR fleet-setup OR fleet-all.
       operationId: get-fleet-epm-templates-pkgname-pkgversion-inputs
       parameters:
-        - in: path
+        - description: Package name
+          in: path
           name: pkgName
           required: true
           schema:
             type: string
-        - in: path
+        - description: Package version
+          in: path
           name: pkgVersion
           required: true
           schema:
             type: string
-        - in: query
+        - description: 'Output format for the inputs template: json, yml, or yaml'
+          in: query
           name: format
           required: false
           schema:
@@ -48068,12 +48216,14 @@ paths:
               - yml
               - yaml
             type: string
-        - in: query
+        - description: When true, allow prerelease versions
+          in: query
           name: prerelease
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: When true, return inputs even if the package signature cannot be verified
+          in: query
           name: ignoreUnverified
           required: false
           schema:
@@ -48795,7 +48945,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the Fleet Server host
+          in: path
           name: itemId
           required: true
           schema:
@@ -48875,7 +49026,8 @@ paths:
         Get a Fleet Server host by ID.<br/><br/>[Required authorization] Route required privileges: fleet-settings-read.
       operationId: get-fleet-fleet-server-hosts-itemid
       parameters:
-        - in: path
+        - description: The ID of the Fleet Server host
+          in: path
           name: itemId
           required: true
           schema:
@@ -49071,7 +49223,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the Fleet Server host
+          in: path
           name: itemId
           required: true
           schema:
@@ -49496,17 +49649,20 @@ paths:
         Get the Kubernetes manifest for deploying Elastic Agent.<br/><br/>[Required authorization] Route required privileges: fleet-agent-policies-read OR fleet-setup.
       operationId: get-fleet-kubernetes
       parameters:
-        - in: query
+        - description: If true, returns the manifest as a downloadable file
+          in: query
           name: download
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: Fleet Server host URL to include in the manifest
+          in: query
           name: fleetServer
           required: false
           schema:
             type: string
-        - in: query
+        - description: Enrollment token to include in the manifest
+          in: query
           name: enrolToken
           required: false
           schema:
@@ -49576,17 +49732,20 @@ paths:
         Download the Kubernetes manifest for deploying Elastic Agent.<br/><br/>[Required authorization] Route required privileges: fleet-agent-policies-read OR fleet-setup.
       operationId: get-fleet-kubernetes-download
       parameters:
-        - in: query
+        - description: If true, returns the manifest as a downloadable file
+          in: query
           name: download
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: Fleet Server host URL to include in the manifest
+          in: query
           name: fleetServer
           required: false
           schema:
             type: string
-        - in: query
+        - description: Enrollment token to include in the manifest
+          in: query
           name: enrolToken
           required: false
           schema:
@@ -49757,7 +49916,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: query
+        - description: Set to true to confirm you understand the risks of rotating the key pair
+          in: query
           name: acknowledge
           required: false
           schema:
@@ -50056,7 +50216,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the output
+          in: path
           name: outputId
           required: true
           schema:
@@ -50154,7 +50315,8 @@ paths:
         Get output by ID.<br/><br/>[Required authorization] Route required privileges: fleet-settings-read OR fleet-agent-policies-read.
       operationId: get-fleet-outputs-outputid
       parameters:
-        - in: path
+        - description: The ID of the output
+          in: path
           name: outputId
           required: true
           schema:
@@ -50252,7 +50414,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the output
+          in: path
           name: outputId
           required: true
           schema:
@@ -50360,7 +50523,8 @@ paths:
         Get the latest health status of an output by ID.<br/><br/>[Required authorization] Route required privileges: fleet-settings-read.
       operationId: get-fleet-outputs-outputid-health
       parameters:
-        - in: path
+        - description: The ID of the output
+          in: path
           name: outputId
           required: true
           schema:
@@ -50441,22 +50605,26 @@ paths:
         List all package policies.
       operationId: get-fleet-package-policies
       parameters:
-        - in: query
+        - description: Page number
+          in: query
           name: page
           required: false
           schema:
             type: number
-        - in: query
+        - description: Number of results per page
+          in: query
           name: perPage
           required: false
           schema:
             type: number
-        - in: query
+        - description: Field to sort results by
+          in: query
           name: sortField
           required: false
           schema:
             type: string
-        - in: query
+        - description: Sort order, ascending or descending
+          in: query
           name: sortOrder
           required: false
           schema:
@@ -50464,17 +50632,20 @@ paths:
               - desc
               - asc
             type: string
-        - in: query
+        - description: When true, only show policies with available upgrades
+          in: query
           name: showUpgradeable
           required: false
           schema:
             type: boolean
-        - in: query
+        - description: A KQL query string to filter results
+          in: query
           name: kuery
           required: false
           schema:
             type: string
-        - in: query
+        - description: 'Format for the response: simplified or legacy'
+          in: query
           name: format
           required: false
           schema:
@@ -50482,7 +50653,8 @@ paths:
               - simplified
               - legacy
             type: string
-        - in: query
+        - description: When true, include the agent count per package policy
+          in: query
           name: withAgentCount
           required: false
           schema:
@@ -50562,6 +50734,25 @@ paths:
                                   type: array
                         enabled:
                           type: boolean
+                        global_data_tags:
+                          items:
+                            additionalProperties: false
+                            type: object
+                            properties:
+                              name:
+                                description: The name of the custom field. Cannot contain spaces.
+                                type: string
+                              value:
+                                anyOf:
+                                  - type: string
+                                  - type: number
+                                description: The value of the custom field.
+                            required:
+                              - name
+                              - value
+                          maxItems: 100
+                          nullable: true
+                          type: array
                         id:
                           description: Package policy unique identifier.
                           type: string
@@ -51093,7 +51284,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: query
+        - description: 'Format for the response: simplified or legacy'
+          in: query
           name: format
           required: false
           schema:
@@ -51146,6 +51338,25 @@ paths:
                     force:
                       description: Force package policy creation even if the package is not verified, or if the agent policy is managed.
                       type: boolean
+                    global_data_tags:
+                      items:
+                        additionalProperties: false
+                        type: object
+                        properties:
+                          name:
+                            description: The name of the custom field. Cannot contain spaces.
+                            type: string
+                          value:
+                            anyOf:
+                              - type: string
+                              - type: number
+                            description: The value of the custom field.
+                        required:
+                          - name
+                          - value
+                      maxItems: 100
+                      nullable: true
+                      type: array
                     id:
                       description: Package policy unique identifier
                       type: string
@@ -51743,6 +51954,25 @@ paths:
                                 type: array
                       enabled:
                         type: boolean
+                      global_data_tags:
+                        items:
+                          additionalProperties: false
+                          type: object
+                          properties:
+                            name:
+                              description: The name of the custom field. Cannot contain spaces.
+                              type: string
+                            value:
+                              anyOf:
+                                - type: string
+                                - type: number
+                              description: The value of the custom field.
+                          required:
+                            - name
+                            - value
+                        maxItems: 100
+                        nullable: true
+                        type: array
                       id:
                         description: Package policy unique identifier.
                         type: string
@@ -52293,7 +52523,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: query
+        - description: 'Format for the response: simplified or legacy'
+          in: query
           name: format
           required: false
           schema:
@@ -52397,6 +52628,25 @@ paths:
                                   type: array
                         enabled:
                           type: boolean
+                        global_data_tags:
+                          items:
+                            additionalProperties: false
+                            type: object
+                            properties:
+                              name:
+                                description: The name of the custom field. Cannot contain spaces.
+                                type: string
+                              value:
+                                anyOf:
+                                  - type: string
+                                  - type: number
+                                description: The value of the custom field.
+                            required:
+                              - name
+                              - value
+                          maxItems: 100
+                          nullable: true
+                          type: array
                         id:
                           description: Package policy unique identifier.
                           type: string
@@ -52939,12 +53189,14 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the package policy
+          in: path
           name: packagePolicyId
           required: true
           schema:
             type: string
-        - in: query
+        - description: When true, delete the package policy even if it is managed
+          in: query
           name: force
           required: false
           schema:
@@ -53013,12 +53265,14 @@ paths:
         Get a package policy by ID.
       operationId: get-fleet-package-policies-packagepolicyid
       parameters:
-        - in: path
+        - description: The ID of the package policy
+          in: path
           name: packagePolicyId
           required: true
           schema:
             type: string
-        - in: query
+        - description: 'Format for the response: simplified or legacy'
+          in: query
           name: format
           required: false
           schema:
@@ -53097,6 +53351,25 @@ paths:
                                 type: array
                       enabled:
                         type: boolean
+                      global_data_tags:
+                        items:
+                          additionalProperties: false
+                          type: object
+                          properties:
+                            name:
+                              description: The name of the custom field. Cannot contain spaces.
+                              type: string
+                            value:
+                              anyOf:
+                                - type: string
+                                - type: number
+                              description: The value of the custom field.
+                          required:
+                            - name
+                            - value
+                        maxItems: 100
+                        nullable: true
+                        type: array
                       id:
                         description: Package policy unique identifier.
                         type: string
@@ -53636,12 +53909,14 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the package policy
+          in: path
           name: packagePolicyId
           required: true
           schema:
             type: string
-        - in: query
+        - description: 'Format for the response: simplified or legacy'
+          in: query
           name: format
           required: false
           schema:
@@ -53694,6 +53969,25 @@ paths:
                       type: boolean
                     force:
                       type: boolean
+                    global_data_tags:
+                      items:
+                        additionalProperties: false
+                        type: object
+                        properties:
+                          name:
+                            description: The name of the custom field. Cannot contain spaces.
+                            type: string
+                          value:
+                            anyOf:
+                              - type: string
+                              - type: number
+                            description: The value of the custom field.
+                        required:
+                          - name
+                          - value
+                      maxItems: 100
+                      nullable: true
+                      type: array
                     inputs:
                       items:
                         additionalProperties: false
@@ -54284,6 +54578,25 @@ paths:
                                 type: array
                       enabled:
                         type: boolean
+                      global_data_tags:
+                        items:
+                          additionalProperties: false
+                          type: object
+                          properties:
+                            name:
+                              description: The name of the custom field. Cannot contain spaces.
+                              type: string
+                            value:
+                              anyOf:
+                                - type: string
+                                - type: number
+                              description: The value of the custom field.
+                          required:
+                            - name
+                            - value
+                        maxItems: 100
+                        nullable: true
+                        type: array
                       id:
                         description: Package policy unique identifier.
                         type: string
@@ -55322,6 +55635,25 @@ paths:
                                         type: array
                               enabled:
                                 type: boolean
+                              global_data_tags:
+                                items:
+                                  additionalProperties: false
+                                  type: object
+                                  properties:
+                                    name:
+                                      description: The name of the custom field. Cannot contain spaces.
+                                      type: string
+                                    value:
+                                      anyOf:
+                                        - type: string
+                                        - type: number
+                                      description: The value of the custom field.
+                                  required:
+                                    - name
+                                    - value
+                                maxItems: 100
+                                nullable: true
+                                type: array
                               id:
                                 type: string
                               inputs:
@@ -55841,6 +56173,25 @@ paths:
                                 type: array
                               force:
                                 type: boolean
+                              global_data_tags:
+                                items:
+                                  additionalProperties: false
+                                  type: object
+                                  properties:
+                                    name:
+                                      description: The name of the custom field. Cannot contain spaces.
+                                      type: string
+                                    value:
+                                      anyOf:
+                                        - type: string
+                                        - type: number
+                                      description: The value of the custom field.
+                                  required:
+                                    - name
+                                    - value
+                                maxItems: 100
+                                nullable: true
+                                type: array
                               id:
                                 type: string
                               inputs:
@@ -56491,7 +56842,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the proxy
+          in: path
           name: itemId
           required: true
           schema:
@@ -56571,7 +56923,8 @@ paths:
         Get a proxy by ID.<br/><br/>[Required authorization] Route required privileges: fleet-settings-read.
       operationId: get-fleet-proxies-itemid
       parameters:
-        - in: path
+        - description: The ID of the proxy
+          in: path
           name: itemId
           required: true
           schema:
@@ -56694,7 +57047,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The ID of the proxy
+          in: path
           name: itemId
           required: true
           schema:
@@ -57560,7 +57914,8 @@ paths:
           schema:
             maxLength: 50
             type: string
-        - in: query
+        - description: Partial match filtering for uninstall token values
+          in: query
           name: search
           required: false
           schema:
@@ -57573,7 +57928,8 @@ paths:
           schema:
             minimum: 5
             type: number
-        - in: query
+        - description: Page number
+          in: query
           name: page
           required: false
           schema:
@@ -57691,7 +58047,8 @@ paths:
         Get one decrypted uninstall token by its ID.<br/><br/>[Required authorization] Route required privileges: fleet-agents-all.
       operationId: get-fleet-uninstall-tokens-uninstalltokenid
       parameters:
-        - in: path
+        - description: The ID of the uninstall token
+          in: path
           name: uninstallTokenId
           required: true
           schema:
@@ -63233,12 +63590,26 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                taskManagerUnavailable:
+                  summary: Task manager is unavailable
+                  value:
+                    message: Task Manager is unavailable, but is required by the risk engine. Please enable the taskManager plugin and try again.
+                    status_code: 400
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_TaskManagerUnavailableResponse'
           description: Task manager is unavailable
         default:
           content:
             application/json:
+              examples:
+                cleanupFailed:
+                  summary: Cleanup failed
+                  value:
+                    cleanup_successful: false
+                    errors:
+                      - error: Risk engine is disabled or deleted already.
+                        seq: 1
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_CleanUpRiskEngineErrorResponse'
           description: Unexpected error
@@ -63343,12 +63714,26 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                taskManagerUnavailable:
+                  summary: Task manager is unavailable
+                  value:
+                    message: Task Manager is unavailable, but is required by the risk engine. Please enable the taskManager plugin and try again.
+                    status_code: 400
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_TaskManagerUnavailableResponse'
           description: Task manager is unavailable
         default:
           content:
             application/json:
+              examples:
+                configureError:
+                  summary: Configure saved object failed
+                  value:
+                    errors:
+                      - error: Internal server error
+                        seq: 1
+                    risk_engine_saved_object_configured: false
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_ConfigureRiskEngineSavedObjectErrorResponse'
           description: Unexpected error
@@ -63371,7 +63756,13 @@ paths:
       operationId: ScheduleRiskEngineNow
       requestBody:
         content:
-          application/json: {}
+          application/json:
+            examples:
+              emptyRequest:
+                summary: No request body
+                value: {}
+            schema:
+              type: object
       responses:
         '200':
           content:
@@ -63387,12 +63778,24 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                taskManagerUnavailable:
+                  summary: Task manager is unavailable
+                  value:
+                    message: Task Manager is unavailable, but is required by the risk engine. Please enable the taskManager plugin and try again.
+                    status_code: 400
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_TaskManagerUnavailableResponse'
           description: Task manager is unavailable
         default:
           content:
             application/json:
+              examples:
+                scheduleNowError:
+                  summary: Schedule now failed
+                  value:
+                    full_error: '{}'
+                    message: Internal server error
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_RiskEngineScheduleNowErrorResponse'
           description: Unexpected error
@@ -75228,12 +75631,61 @@ paths:
             type: string
       responses:
         '200':
-          description: Indicates a successful call.
           content:
             application/json:
               examples:
-                getSpaceResponseExample:
-                  $ref: '#/components/examples/get_space_response'
+                getSpaceResponse:
+                  description: A response that contains the full configuration for a single Kibana space.
+                  summary: Get details about a marketing space
+                  value:
+                    color: '#aabbcc'
+                    description: This is the Marketing Space
+                    disabledFeatures: []
+                    id: marketing
+                    imageUrl: ''
+                    initials: MK
+                    name: Marketing
+                    solution: es
+              schema:
+                additionalProperties: false
+                type: object
+                properties:
+                  _reserved:
+                    type: boolean
+                  color:
+                    description: The hexadecimal color code used in the space avatar. By default, the color is automatically generated from the space name.
+                    type: string
+                  description:
+                    description: A description for the space.
+                    type: string
+                  disabledFeatures:
+                    default: []
+                    items:
+                      description: The list of features that are turned off in the space.
+                      type: string
+                    maxItems: 100
+                    type: array
+                  id:
+                    description: The space ID that is part of the Kibana URL when inside the space. Space IDs are limited to lowercase alphanumeric, underscore, and hyphen characters (a-z, 0-9, _, and -). You are cannot change the ID with the update operation.
+                    type: string
+                  imageUrl:
+                    description: The data-URL encoded image to display in the space avatar. If specified, initials will not be displayed and the color will be visible as the background color for transparent images. For best results, your image should be 64x64. Images will not be optimized by this API call, so care should be taken when using custom images.
+                    type: string
+                  initials:
+                    description: One or two characters that are shown in the space avatar. By default, the initials are automatically generated from the space name.
+                    maxLength: 2
+                    type: string
+                  name:
+                    description: 'The display name for the space. '
+                    minLength: 1
+                    type: string
+                  projectRouting:
+                    description: Cross-project search default routing configuration for this space. Controls whether searches are scoped to a single project or span multiple projects in serverless environments.
+                    type: string
+                required:
+                  - id
+                  - name
+          description: Indicates a successful call.
       summary: Get a space
       tags:
         - spaces
@@ -75304,6 +75756,60 @@ paths:
                 $ref: '#/components/examples/update_space_request'
       responses:
         '200':
+          content:
+            application/json:
+              examples:
+                updateSpaceResponse:
+                  description: A response that contains the updated configuration of the Kibana space.
+                  summary: Update the marketing space
+                  value:
+                    color: '#aabbcc'
+                    description: An updated description for the Marketing Space
+                    disabledFeatures: []
+                    id: marketing
+                    imageUrl: ''
+                    initials: MK
+                    name: Marketing
+                    solution: es
+              schema:
+                additionalProperties: false
+                type: object
+                properties:
+                  _reserved:
+                    type: boolean
+                  color:
+                    description: The hexadecimal color code used in the space avatar. By default, the color is automatically generated from the space name.
+                    type: string
+                  description:
+                    description: A description for the space.
+                    type: string
+                  disabledFeatures:
+                    default: []
+                    items:
+                      description: The list of features that are turned off in the space.
+                      type: string
+                    maxItems: 100
+                    type: array
+                  id:
+                    description: The space ID that is part of the Kibana URL when inside the space. Space IDs are limited to lowercase alphanumeric, underscore, and hyphen characters (a-z, 0-9, _, and -). You are cannot change the ID with the update operation.
+                    type: string
+                  imageUrl:
+                    description: The data-URL encoded image to display in the space avatar. If specified, initials will not be displayed and the color will be visible as the background color for transparent images. For best results, your image should be 64x64. Images will not be optimized by this API call, so care should be taken when using custom images.
+                    type: string
+                  initials:
+                    description: One or two characters that are shown in the space avatar. By default, the initials are automatically generated from the space name.
+                    maxLength: 2
+                    type: string
+                  name:
+                    description: 'The display name for the space. '
+                    minLength: 1
+                    type: string
+                  projectRouting:
+                    description: Cross-project search default routing configuration for this space. Controls whether searches are scoped to a single project or span multiple projects in serverless environments.
+                    type: string
+                required:
+                  - id
+                  - name
           description: Indicates a successful call.
       summary: Update a space
       tags:
